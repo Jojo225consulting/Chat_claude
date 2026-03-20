@@ -12,7 +12,7 @@ def main():
         st.write("Fichier uploadé :", uploaded_file.name)
     context = st.text_area("Entrez votre contexte ici", height=100)
     user_text = st.text_area("Entrez votre prompt ici", height=100)
-
+    st.write("Vérification")
     if st.button("Envoyer le prompt à Claude"):
         try:
             client = anthropic.Anthropic(api_key=password)
