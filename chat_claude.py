@@ -67,14 +67,15 @@ def main():
         except Exception as e:
             st.warning("Veuillez entrer votre clé API et un prompt avant d'envoyer.")
             st.error(f"Une erreur est survenue : {e}")
-    
-    json_string = json.dumps(dict(st.session_state["new_historic"]), indent=4)
-    st.download_button(
-        label="📥 Télécharger les réponses de Claude Ici",
-        data=json_string,
-        file_name="session_answers.json",
-        mime="application/json"
-    )
+
+    try:
+        json_string = json.dumps(dict(st.session_state["new_historic"]), indent=4)
+        st.download_button(
+            label="📥 Télécharger les réponses de Claude Ici",
+            data=json_string,
+            file_name="session_answers.json",
+            mime="application/json"
+        )
     # if st.button("Enregistrer l'historique du prompt"):
 
 
