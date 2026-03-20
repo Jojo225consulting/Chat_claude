@@ -50,9 +50,9 @@ def main():
                         #"2. la consciencosité du client \n" \
                         #"3. le neuvrosisme du client" \
                         messages=[
-                            {"role": "user", "content" : f"{user_text} \n
+                            {"role": "user", "content" : f"""{user_text} \n
                             Discussion ci-dessous: \n
-                            {conv}!"}
+                            {conv}!"""}
                         ]
 
                     )
