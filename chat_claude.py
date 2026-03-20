@@ -59,7 +59,7 @@ def main():
 
                     
                     st.session_state["new_historic"][st.session_state["ID"][i]] =  {"user" : user_text ,
-                                                           "model" : response.content[0].text} }
+                                                           "model" : response.content[0].text} 
                 st.write("Réponse de Claude :")
                 st.write("Ce que contient votre historique :")
                 st.write(st.session_state["new_historic"])
