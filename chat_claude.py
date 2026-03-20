@@ -76,6 +76,8 @@ def main():
             file_name="session_answers.json",
             mime="application/json"
         )
+    except:
+        pass
     # if st.button("Enregistrer l'historique du prompt"):
 
 
