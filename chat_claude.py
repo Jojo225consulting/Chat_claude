@@ -17,7 +17,7 @@ def main():
         try:
             client = anthropic.Anthropic(api_key=password)
             if "new_historic" not in st.session_state:
-                st.session_state["new_historic"] = []
+                st.session_state["new_historic"] = {}
             if uploaded_file is not None:
                 old_historic = []
                 st.session_state["ID"] = []
@@ -37,7 +37,7 @@ def main():
                             
 
                     old_historic.append(current_chat)
-                for conv in old_historic:
+                for i,conv in enumarate(old_historic):
                     def_profil = """Le meilleur profil est celui d'un emprunteur discipliné, éclairé et émotionnellement stable. 
                     Il sait ce qu'il signe, honore ses échéances naturellement, et ne laisse pas un événement stressant (perte d'emploi, dépense imprévue) dérailler ses finances.
                     Le pire profil cumule trois fragilités qui se renforcent mutuellement : l'ignorance financière lui fait sous-estimer ses engagements, la faible conscienciosité l'empêche de les honorer même quand il le pourrait, et le névrosisme élevé amplifie les comportements contre-productifs dès qu'un choc survient. 
@@ -58,8 +58,8 @@ def main():
                     )
 
                     
-                    st.session_state["new_historic"].append( { "user" : user_text , 
-                                                        "model" : response.content[0].text} )
+                    st.session_state["new_historic"][st.session_state["ID"][i]] =  {"user" : user_text ,
+                                                           "model" : response.content[0].text} }
                 st.write("Réponse de Claude :")
                 st.write("Ce que contient votre historique :")
                 st.write(st.session_state["new_historic"])
