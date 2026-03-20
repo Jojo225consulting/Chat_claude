@@ -38,15 +38,21 @@ def main():
 
                     old_historic.append(current_chat)
                 for conv in old_historic:
+                    def_profil = """Le meilleur profil est celui d'un emprunteur discipliné, éclairé et émotionnellement stable. 
+                    Il sait ce qu'il signe, honore ses échéances naturellement, et ne laisse pas un événement stressant (perte d'emploi, dépense imprévue) dérailler ses finances.
+                    Le pire profil cumule trois fragilités qui se renforcent mutuellement : l'ignorance financière lui fait sous-estimer ses engagements, la faible conscienciosité l'empêche de les honorer même quand il le pourrait, et le névrosisme élevé amplifie les comportements contre-productifs dès qu'un choc survient. 
+                    C'est la combinaison de ces trois facteurs — et non l'un d'eux isolément — qui rend le profil véritablement à risque."""
                     response = client.messages.create(
                         model = "claude-opus-4-6",
                         max_tokens = 4000,
-                        system = context + ": \n" + f"{conv}", #Tu est un analyste de profil client pour l'octroi de prêt bancaire. Tu as posé des questions à un client pour évaluer des scores sur 100 de 3 critères: \n" \
+                        system = context, #Tu est un analyste de profil client pour l'octroi de prêt bancaire. Tu as posé des questions à un client pour évaluer des scores sur 100 de 3 critères: \n" \
                         #"1. le niveau de connaissance financière du client \n" \
                         #"2. la consciencosité du client \n" \
                         #"3. le neuvrosisme du client" \
                         messages=[
-                            {"role": "user", "content" : f"{user_text} !"}
+                            {"role": "user", "content" : f"{user_text} \n
+                            Discussion ci-dessous: \n
+                            {conv}!"}
                         ]
 
                     )
@@ -61,7 +67,14 @@ def main():
         except Exception as e:
             st.warning("Veuillez entrer votre clé API et un prompt avant d'envoyer.")
             st.error(f"Une erreur est survenue : {e}")
-
+    
+    json_string = json.dumps(dict(st.session_state["new_historic"]), indent=4)
+    st.download_button(
+        label="📥 Télécharger les réponses de Claude Ici",
+        data=json_string,
+        file_name="session_answers.json",
+        mime="application/json"
+    )
     # if st.button("Enregistrer l'historique du prompt"):
 
 
