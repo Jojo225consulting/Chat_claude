@@ -58,7 +58,7 @@ def main():
                     )
 
                     
-                    st.session_state["new_historic"][st.session_state["ID"][i]] =  {"user" : user_text ,
+                    st.session_state["new_historic"][st.session_state["ID"][i]] =  {"user" : context + " \n \n " + user_text ,
                                                            "model" : response.content[0].text} 
                 st.write("Réponse de Claude :")
                 st.write("Ce que contient votre historique :")
