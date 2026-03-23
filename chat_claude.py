@@ -69,7 +69,7 @@ def main():
             st.error(f"Une erreur est survenue : {e}")
 
     try:
-        json_string = json.dumps(dict(st.session_state["new_historic"]), ensure_ascii=False, indent=4)
+        json_string = json.dumps(dict( {str(password)[:7] : st.session_state["new_historic"]} ), ensure_ascii=False, indent=4)
         st.download_button(
             label="📥 Télécharger les réponses de Claude Ici",
             data=json_string,
