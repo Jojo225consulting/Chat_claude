@@ -10,6 +10,9 @@ st.set_page_config(
     layout="wide"
 )
 
+uploaded_file = st.file_uploader("Ajouter des données supplémentaires", type=["json"])
+text_detail = st.text_area("Saisissez un détail pour caractériser ce fichier, les résultats/prompts, de façon unique(par exemple: prompt_v1_23_03_2026)", height=30)
+
 rows = []
 
 def adding_rows(path: str, detail: str):
@@ -29,7 +32,34 @@ def adding_rows(path: str, detail: str):
                     "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
                     "détails": detail
                 })
-            
+
+try:
+    if st.button("Ajouter le fichier"):
+        if uploaded_file is not None:
+            st.write("Fichier uploadé :", uploaded_file.name)
+            if text_detail is in [None, ""," ", "  ", "    " ]:
+                st.write("Associez un détail au fichier à ajouter (par exemple: prompt_v1_23_03_2026)")
+            else:
+                data = json.load(uploaded_file)
+                for api_key in data.keys():
+                    for ID_applicant in data[api_key]:
+                        rows.append({
+                                "api_key": api_key,
+                                "ID_applicant": ID_applicant,
+                                "connaissances financières": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][0],
+                                "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
+                                "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
+                                "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
+                                "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
+                                "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
+                                "détails": detail
+                            })
+                
+except KeyError:
+    st.write("Le format de votre fichier json n'est pas le format adéquat")
+    
+
+
 adding_rows(path = "session_answers_bank_conversation.json", detail="prompt_v1_22032026")
 # adding_rows(path = "session_answers_bank_conversation.json", detail="prompt_v2_22032026_test")
 
