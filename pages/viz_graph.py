@@ -37,7 +37,7 @@ try:
     if st.button("Ajouter le fichier"):
         if uploaded_file is not None:
             st.write("Fichier uploadé :", uploaded_file.name)
-            if text_detail is in [None, ""," ", "  ", "    " ]:
+            if text_detail in [None, ""," ", "  ", "    " ]:
                 st.write("Associez un détail au fichier à ajouter (par exemple: prompt_v1_23_03_2026)")
             else:
                 data = json.load(uploaded_file)
@@ -52,7 +52,7 @@ try:
                                 "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
                                 "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
                                 "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
-                                "détails": detail
+                                "détails": text_detail
                             })
                 
 except KeyError:
