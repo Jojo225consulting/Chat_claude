@@ -17,9 +17,9 @@ text_detail = st.text_area("Saisissez un détail pour caractériser ce fichier, 
 
 rows = []
 
-def adding_rows(path: str, detail: str):
+def adding_rows(path: str):
     global rows
-    with open(path, "r", encoding="utf-8") as f: # path du dossier contenant tout le projet
+    with open(f"json_file/{path}", "r", encoding="utf-8") as f: # path du dossier contenant tout le projet
         data = json.load(f)
     for api_key in data.keys():
         for ID_applicant in data[api_key]:
@@ -32,36 +32,28 @@ def adding_rows(path: str, detail: str):
                     "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
                     "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
                     "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
-                    "détails": detail
+                    "détails": path
                 })
 
-def adding_rows_auto(path: str):
-    global rows
+# def adding_rows_auto(path: str):
+#     global rows
 
-    repo = "Jojo225consulting/Chat_claude"
-    path = "data_test.json"
-    url = f"https://api.github.com/repos/{repo}/contents/{path}"
-    response = requests.get(url)
-    data = response.json()
+#     with open(f"json_file/{path}", "r", encoding="utf-8") as f: # path du dossier contenant tout le projet
+#         data = json.load(f)
 
-    # décoder le contenu
-    content = base64.b64decode(data["content"]).decode()
-    # convertir en dict Python
-    data = json.loads(content)
-
-    for api_key in data.keys():
-        for ID_applicant in data[api_key]:
-            rows.append({
-                    "api_key": api_key,
-                    "ID_applicant": ID_applicant,
-                    "connaissances financières": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][0],
-                    "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
-                    "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
-                    "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
-                    "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
-                    "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
-                    "détails": path[:-5]
-                })
+#     for api_key in data.keys():
+#         for ID_applicant in data[api_key]:
+#             rows.append({
+#                     "api_key": api_key,
+#                     "ID_applicant": ID_applicant,
+#                     "connaissances financières": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][0],
+#                     "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
+#                     "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
+#                     "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
+#                     "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
+#                     "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
+#                     "détails": path[:-5]
+#                 })
 
 try:
     if st.button("Ajouter le fichier"):
@@ -86,18 +78,16 @@ try:
                             })
                 
                 json_str = json.dumps(data, indent=4)
-
                 # Encodage base64 (obligatoire pour GitHub API)
                 content = base64.b64encode(json_str.encode()).decode()
-
                 # Infos repo
-                repo = "Jojo225consulting/Chat_claude"
+                repo = st.secrets["repo"]
                 path = "data_test.json"
-                token = "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"
+                token = st.secrets["token"]
                 url = f"https://api.github.com/repos/{repo}/contents/{path}"
                 headers = {"Authorization": f"token {token}"}
                 payload = {
-                    "message": "update json via python",
+                    "message": "adding new json file",
                     "content": content
                 }
                 response = requests.put(url, headers=headers, json=payload)
@@ -107,16 +97,20 @@ except KeyError:
     st.write("Le format de votre fichier json n'est pas le format adéquat")
     
 
+url = f"https://api.github.com/repos/{st.secrets["repo"]}/contents/json_file"
+response = requests.get(url)
+files = response.json()
+for f in files:
+    adding_rows(path = f["name"], detail=f["name"])
 
-adding_rows(path = "session_answers_bank_conversation.json", detail="prompt_v1_22032026")
-# adding_rows(path = "session_answers_bank_conversation.json", detail="prompt_v2_22032026_test")
-
-try:
-    adding_rows_auto(path = "data_test.json")
-except:
-    pass
-
-
+# try:
+#     adding_rows_auto(path = "data_test.json")
+# except KeyError as k:
+#     st.write("Le format du fichier data_test.json n'est pas le format adéquat: ", k)
+# except Exception as e:
+#     st.write("Une erreur est survenue lors de l'ajout du fichier data_test.json: ", e)
+# except FileNotFoundError as f:
+#     st.write("Le fichier data_test.json n'a pas été trouvé: ", f)
 
 
 df = pd.DataFrame(rows)
