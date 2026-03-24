@@ -90,7 +90,7 @@ try:
                     "content": content
                 }
                 response = requests.put(url, headers=headers, json=payload)
-                print(response.json())
+                st.write( "réponse de github : ", response.json())
                 
 except KeyError:
     st.write("Le format de votre fichier json n'est pas le format adéquat")
