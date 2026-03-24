@@ -96,8 +96,9 @@ try:
 except KeyError:
     st.write("Le format de votre fichier json n'est pas le format adéquat")
     
+repo = st.secrets["repo"]
 
-url = f"https://api.github.com/repos/{st.secrets["repo"]}/contents/json_file"
+url = f"https://api.github.com/repos/{repo}/contents/json_file"
 response = requests.get(url)
 files = response.json()
 for f in files:
