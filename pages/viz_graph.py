@@ -83,7 +83,7 @@ try:
                 # Infos repo
                 repo = "Jojo225consulting/Chat_claude"
                 token = "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"
-                url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_detail}"
+                url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_detail}.json"
                 headers = {"Authorization": f"token {token}"}
                 payload = {
                     "message": "adding new json file",
