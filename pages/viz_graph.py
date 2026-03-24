@@ -82,7 +82,7 @@ try:
                 content = base64.b64encode(json_str.encode()).decode()
                 # Infos repo
                 repo = "Jojo225consulting/Chat_claude"
-                token = "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"
+                token = "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"
                 url = f"https://api.github.com/repos/Jojo225consulting/Chat_claude/contents/data_test2.json"
                 headers = {"Authorization": f"token {token}"}
                 payload = {
