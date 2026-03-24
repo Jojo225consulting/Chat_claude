@@ -83,7 +83,7 @@ try:
                 # Infos repo
                 repo = st.secrets["repo"]
                 token = st.secrets["token"]
-                url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_user}"
+                url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_detail}"
                 headers = {"Authorization": f"token {token}"}
                 payload = {
                     "message": "adding new json file",
