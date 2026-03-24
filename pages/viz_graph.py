@@ -102,7 +102,7 @@ url = f"https://api.github.com/repos/{repo}/contents/json_file"
 response = requests.get(url)
 files = response.json()
 for f in files:
-    adding_rows(path = f["name"], detail=f["name"])
+    adding_rows(path = f["name"])
 
 # try:
 #     adding_rows_auto(path = "data_test.json")
