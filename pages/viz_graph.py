@@ -81,8 +81,8 @@ try:
                 # Encodage base64 (obligatoire pour GitHub API)
                 content = base64.b64encode(json_str.encode()).decode()
                 # Infos repo
-                repo = st.secrets["repo"]
-                token = st.secrets["token"]
+                repo = "Jojo225consulting/Chat_claude"
+                token = "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"
                 url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_detail}"
                 headers = {"Authorization": f"token {token}"}
                 payload = {
