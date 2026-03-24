@@ -12,6 +12,9 @@ st.set_page_config(
     layout="wide"
 )
 
+repo = st.secrets["repo"]
+token = st.secrets["token"]
+
 uploaded_file = st.file_uploader("Ajouter des données supplémentaires", type=["json"])
 text_detail = st.text_area("Saisissez un détail pour caractériser ce fichier, les résultats/prompts, de façon unique(par exemple: prompt_v1_23_03_2026)", height=30)
 
@@ -81,8 +84,6 @@ try:
                 # Encodage base64 (obligatoire pour GitHub API)
                 content = base64.b64encode(json_str.encode()).decode()
                 # Infos repo
-                repo = st.secrets["repo"]
-                token = st.secrets["token"]
                 url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_detail}.json"
                 headers = {"Authorization": f"token {token}"}
                 payload = {
@@ -94,14 +95,11 @@ try:
 except KeyError:
     st.write("Le format de votre fichier json n'est pas le format adéquat")
     
-repo = st.secrets["repo"]
-
+headers = {"Authorization": f"token {token}"}
 url = f"https://api.github.com/repos/{repo}/contents/json_file"
-response = requests.get(url)
+response = requests.get(url, headers=headers)
 files = response.json()
-st.write("files ",files)
 for f in files:
-    st.write("for f :", f)
     adding_rows(path = f["name"])
 
 # try:
