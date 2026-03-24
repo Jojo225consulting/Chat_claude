@@ -82,9 +82,8 @@ try:
                 content = base64.b64encode(json_str.encode()).decode()
                 # Infos repo
                 repo = st.secrets["repo"]
-                path = "data_test.json"
                 token = st.secrets["token"]
-                url = f"https://api.github.com/repos/{repo}/contents/{path}"
+                url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_user}"
                 headers = {"Authorization": f"token {token}"}
                 payload = {
                     "message": "adding new json file",
