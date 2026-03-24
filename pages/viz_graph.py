@@ -31,7 +31,7 @@ def adding_rows(path: str, detail: str):
                 })
             
 adding_rows(path = "session_answers_bank_conversation.json", detail="prompt_v1_22032026")
-adding_rows(path = "session_answers_bank_conversation.json", detail="prompt_v2_22032026_test")
+# adding_rows(path = "session_answers_bank_conversation.json", detail="prompt_v2_22032026_test")
 
 df = pd.DataFrame(rows)
 
