@@ -10,34 +10,28 @@ st.set_page_config(
     layout="wide"
 )
 
-
-with open("session_answers_bank_conversation.json", "r", encoding="utf-8") as f: # path du dossier contenant tout le projet
-    data = json.load(f)
-
-# keys_level_0 = list(data.keys())
-
-# print(keys_level_0)
-# for key_0 in keys_level_0:
-#     keys_level_1 = list(data[key_0].keys())
-#     for key_1 in keys_level_1: 
-#         print(json.loads(data[key_0][key_1]["model"])["connaissances financières"][0])
-
-
 rows = []
-for api_key in data.keys():
-    for ID_applicant in data[api_key]:
-        rows.append({
-                "api_key": api_key,
-                "ID_applicant": ID_applicant,
-                "connaissances financières": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][0],
-                "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
-                "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
-                "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
-                "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
-                "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1]
-            })
 
+def adding_rows(path: str, detail: str):
+    global rows
+    with open(path, "r", encoding="utf-8") as f: # path du dossier contenant tout le projet
+        data = json.load(f)
+    for api_key in data.keys():
+        for ID_applicant in data[api_key]:
+            rows.append({
+                    "api_key": api_key,
+                    "ID_applicant": ID_applicant,
+                    "connaissances financières": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][0],
+                    "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
+                    "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
+                    "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
+                    "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
+                    "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
+                    "détails": detail
+                })
             
+adding_rows(path = "session_answers_bank_conversation.json", detail="prompt_v1_22032026")
+adding_rows(path = "session_answers_bank_conversation.json", detail="prompt_v2_22032026_test")
 
 df = pd.DataFrame(rows)
 
