@@ -99,7 +99,9 @@ repo = st.secrets["repo"]
 url = f"https://api.github.com/repos/{repo}/contents/json_file"
 response = requests.get(url)
 files = response.json()
+st.write("files ",files)
 for f in files:
+    st.write(" for f ," f)
     adding_rows(path = f["name"])
 
 # try:
