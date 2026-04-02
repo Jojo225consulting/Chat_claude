@@ -7,6 +7,7 @@ import numpy as np
 import json
 import base64
 import requests
+import time
 
 st.set_page_config(
     layout="wide"
