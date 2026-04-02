@@ -65,9 +65,7 @@ try:
             if text_detail in [None, ""," ", "  ", "    " ]:
                 st.write("Associez un détail au fichier à ajouter (par exemple: prompt_v1_23_03_2026)")
             else:
-                st.session_state["data"] = json.load(uploaded_file)
-                st.rerun()
-                data = st.session_state["data"]
+                data = json.load(uploaded_file)
                 for api_key in data.keys():
                     for ID_applicant in data[api_key]:
                         rows.append({
@@ -93,6 +91,7 @@ try:
                     "content": content
                 }
                 response = requests.put(url, headers=headers, json=payload)
+                st.rerun()
                 
 except KeyError:
     st.write("Le format de votre fichier json n'est pas le format adéquat")
