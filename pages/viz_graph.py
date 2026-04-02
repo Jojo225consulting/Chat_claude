@@ -98,7 +98,7 @@ except KeyError:
     st.write("Le format de votre fichier json n'est pas le format adéquat")
 
 #Add a 7 second delay to ensure the file is added to the repo before fetching the list of files again
-time.sleep(7)
+time.sleep(3)
 
 headers = {"Authorization": f"token {token}"}
 url = f"https://api.github.com/repos/{repo}/contents/json_file"
