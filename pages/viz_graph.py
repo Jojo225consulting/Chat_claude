@@ -66,6 +66,7 @@ try:
                 st.write("Associez un détail au fichier à ajouter (par exemple: prompt_v1_23_03_2026)")
             else:
                 data = json.load(uploaded_file)
+                st.rerun()
                 for api_key in data.keys():
                     for ID_applicant in data[api_key]:
                         rows.append({
