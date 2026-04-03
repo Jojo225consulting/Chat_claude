@@ -73,12 +73,18 @@ try:
                                 "api_key": api_key,
                                 "ID_applicant": ID_applicant,
                                 "connaissances financières": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][0],
-                                "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
-                                "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
+                                "Borne inf IC à 95% de CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][2][0],
+                                "Borne sup IC à 95% de CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][2][1],
                                 "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
+                                "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
+                                "Borne inf IC à 95% de Consc.": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][2][0],
+                                "Borne sup IC à 95% de Consc.": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][2][1],
                                 "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
+                                "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
+                                "Borne inf IC à 95% de Neur.": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][2][0],
+                                "Borne sup IC à 95% de Neur.": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][2][1],
                                 "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
-                                "détails": text_detail
+                                "détails sur le prompt/fichier": text_detail
                             })
                 
                 json_str = json.dumps(data, indent=4)
