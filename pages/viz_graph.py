@@ -27,37 +27,24 @@ def adding_rows(path: str):
         data = json.load(f)
     for api_key in data.keys():
         for ID_applicant in data[api_key]:
+            model = json.loads(data[api_key][ID_applicant]["model"])
             rows.append({
-                    "api_key": api_key,
-                    "ID_applicant": ID_applicant,
-                    "connaissances financières": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][0],
-                    "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
-                    "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
-                    "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
-                    "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
-                    "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
-                    "détails": path
-                })
-
-# def adding_rows_auto(path: str):
-#     global rows
-
-#     with open(f"json_file/{path}", "r", encoding="utf-8") as f: # path du dossier contenant tout le projet
-#         data = json.load(f)
-
-#     for api_key in data.keys():
-#         for ID_applicant in data[api_key]:
-#             rows.append({
-#                     "api_key": api_key,
-#                     "ID_applicant": ID_applicant,
-#                     "connaissances financières": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][0],
-#                     "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
-#                     "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
-#                     "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
-#                     "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
-#                     "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
-#                     "détails": path[:-5]
-#                 })
+                                "api_key": api_key,
+                                "ID_applicant": ID_applicant,
+                                "connaissances financières": model.get("connaissances financières", [None])[0],
+                                "Borne inf IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None]])[2][0],
+                                "Borne sup IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None, None]])[2][1],
+                                "Commentaire CF": model.get("connaissances financières", [None, None])[1],
+                                "conscienciosité": model.get("conscienciosité", [None])[0],
+                                "Borne inf IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None]])[2][0],
+                                "Borne sup IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None, None]])[2][1],
+                                "Commentaire conscienciosité": model.get("conscienciosité", [None, None])[1],
+                                "neuroticisme": model.get("neuroticisme", [None])[0],
+                                "Borne inf IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None]])[2][0],
+                                "Borne sup IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None, None]])[2][1],
+                                "Commentaire neuroticisme": model.get("neuroticisme", [None, None])[1],
+                                "détails sur le prompt/fichier": text_detail
+                            })
 
 try:
     if st.button("Ajouter le fichier"):
@@ -69,21 +56,22 @@ try:
                 data = json.load(uploaded_file)
                 for api_key in data.keys():
                     for ID_applicant in data[api_key]:
+                        model = json.loads(data[api_key][ID_applicant]["model"])
                         rows.append({
                                 "api_key": api_key,
                                 "ID_applicant": ID_applicant,
-                                "connaissances financières": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][0],
-                                "Borne inf IC à 95% de CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][2][0],
-                                "Borne sup IC à 95% de CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][2][1],
-                                "Commentaire CF": json.loads(data[api_key][ID_applicant]["model"])["connaissances financières"][1],
-                                "conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][0],
-                                "Borne inf IC à 95% de Consc.": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][2][0],
-                                "Borne sup IC à 95% de Consc.": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][2][1],
-                                "Commentaire conscienciosité": json.loads(data[api_key][ID_applicant]["model"])["conscienciosité"][1],
-                                "neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][0],
-                                "Borne inf IC à 95% de Neur.": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][2][0],
-                                "Borne sup IC à 95% de Neur.": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][2][1],
-                                "Commentaire neuroticisme": json.loads(data[api_key][ID_applicant]["model"])["neuroticisme"][1],
+                                "connaissances financières": model.get("connaissances financières", [None])[0],
+                                "Borne inf IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None]])[2][0],
+                                "Borne sup IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None, None]])[2][1],
+                                "Commentaire CF": model.get("connaissances financières", [None, None])[1],
+                                "conscienciosité": model.get("conscienciosité", [None])[0],
+                                "Borne inf IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None]])[2][0],
+                                "Borne sup IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None, None]])[2][1],
+                                "Commentaire conscienciosité": model.get("conscienciosité", [None, None])[1],
+                                "neuroticisme": model.get("neuroticisme", [None])[0],
+                                "Borne inf IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None]])[2][0],
+                                "Borne sup IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None, None]])[2][1],
+                                "Commentaire neuroticisme": model.get("neuroticisme", [None, None])[1],
                                 "détails sur le prompt/fichier": text_detail
                             })
                 
@@ -112,16 +100,6 @@ response = requests.get(url, headers=headers)
 files = response.json()
 for f in files:
     adding_rows(path = f["name"])
-
-# try:
-#     adding_rows_auto(path = "data_test.json")
-# except KeyError as k:
-#     st.write("Le format du fichier data_test.json n'est pas le format adéquat: ", k)
-# except Exception as e:
-#     st.write("Une erreur est survenue lors de l'ajout du fichier data_test.json: ", e)
-# except FileNotFoundError as f:
-#     st.write("Le fichier data_test.json n'a pas été trouvé: ", f)
-
 
 df = pd.DataFrame(rows)
 
