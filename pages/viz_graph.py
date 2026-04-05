@@ -17,7 +17,7 @@ repo = st.secrets["repo"]
 token = st.secrets["token"]
 
 uploaded_file = st.file_uploader("Ajouter des données supplémentaires", type=["json"])
-text_detail = st.text_area("Saisissez un détail pour caractériser ce fichier, les résultats/prompts, de façon unique(par exemple: prompt_v1_23_03_2026)", height=30)
+# text_detail = st.text_area("Saisissez un détail pour caractériser ce fichier, les résultats/prompts, de façon unique(par exemple: prompt_v1_23_03_2026)", height=30)
 
 rows = []
 
@@ -50,43 +50,40 @@ try:
     if st.button("Ajouter le fichier"):
         if uploaded_file is not None:
             st.write("Fichier uploadé :", uploaded_file.name)
-            if text_detail in [None, ""," ", "  ", "    " ]:
-                st.write("Associez un détail au fichier à ajouter (par exemple: prompt_v1_23_03_2026)")
-            else:
-                data = json.load(uploaded_file)
-                for api_key in data.keys():
-                    for ID_applicant in data[api_key]:
-                        model = json.loads(data[api_key][ID_applicant]["model"])
-                        rows.append({
-                                "api_key": api_key,
-                                "ID_applicant": ID_applicant,
-                                "connaissances financières": model.get("connaissances financières", [None])[0],
-                                "Borne inf IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None]])[2][0],
-                                "Borne sup IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None, None]])[2][1],
-                                "Commentaire CF": model.get("connaissances financières", [None, None])[1],
-                                "conscienciosité": model.get("conscienciosité", [None])[0],
-                                "Borne inf IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None]])[2][0],
-                                "Borne sup IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None, None]])[2][1],
-                                "Commentaire conscienciosité": model.get("conscienciosité", [None, None])[1],
-                                "neuroticisme": model.get("neuroticisme", [None])[0],
-                                "Borne inf IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None]])[2][0],
-                                "Borne sup IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None, None]])[2][1],
-                                "Commentaire neuroticisme": model.get("neuroticisme", [None, None])[1],
-                                "détails sur le prompt/fichier": text_detail
-                            })
-                
-                json_str = json.dumps(data, indent=4)
-                # Encodage base64 (obligatoire pour GitHub API)
-                content = base64.b64encode(json_str.encode()).decode()
-                # Infos repo
-                url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_detail}.json"
-                headers = {"Authorization": f"token {token}"}
-                payload = {
-                    "message": "adding new json file",
-                    "content": content
-                }
-                response = requests.put(url, headers=headers, json=payload)
-                st.rerun()
+            data = json.load(uploaded_file)
+            for api_key in data.keys():
+                for ID_applicant in data[api_key]:
+                    model = json.loads(data[api_key][ID_applicant]["model"])
+                    rows.append({
+                            "api_key": api_key,
+                            "ID_applicant": ID_applicant,
+                            "connaissances financières": model.get("connaissances financières", [None])[0],
+                            "Borne inf IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None]])[2][0],
+                            "Borne sup IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None, None]])[2][1],
+                            "Commentaire CF": model.get("connaissances financières", [None, None])[1],
+                            "conscienciosité": model.get("conscienciosité", [None])[0],
+                            "Borne inf IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None]])[2][0],
+                            "Borne sup IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None, None]])[2][1],
+                            "Commentaire conscienciosité": model.get("conscienciosité", [None, None])[1],
+                            "neuroticisme": model.get("neuroticisme", [None])[0],
+                            "Borne inf IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None]])[2][0],
+                            "Borne sup IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None, None]])[2][1],
+                            "Commentaire neuroticisme": model.get("neuroticisme", [None, None])[1],
+                            "détails sur le prompt/fichier": text_detail
+                        })
+            
+            json_str = json.dumps(data, indent=4)
+            # Encodage base64 (obligatoire pour GitHub API)
+            content = base64.b64encode(json_str.encode()).decode()
+            # Infos repo
+            url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_detail}.json"
+            headers = {"Authorization": f"token {token}"}
+            payload = {
+                "message": "adding new json file",
+                "content": content
+            }
+            response = requests.put(url, headers=headers, json=payload)
+            st.rerun()
                 
 except KeyError:
     st.write("Le format de votre fichier json n'est pas le format adéquat")
