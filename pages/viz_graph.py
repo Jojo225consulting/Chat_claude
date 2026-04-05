@@ -55,28 +55,28 @@ try:
                 for ID_applicant in data[api_key]:
                     model = json.loads(data[api_key][ID_applicant]["model"])
                     rows.append({
-                            "api_key": api_key,
-                            "ID_applicant": ID_applicant,
-                            "connaissances financières": model.get("connaissances financières", [None])[0],
-                            "Borne inf IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None]])[2][0],
-                            "Borne sup IC à 0.95 de CF": model.get("connaissances financières", [None, None, [None, None]])[2][1],
-                            "Commentaire CF": model.get("connaissances financières", [None, None])[1],
-                            "conscienciosité": model.get("conscienciosité", [None])[0],
-                            "Borne inf IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None]])[2][0],
-                            "Borne sup IC à 0.95 de Consc.": model.get("conscienciosité", [None, None, [None, None]])[2][1],
-                            "Commentaire conscienciosité": model.get("conscienciosité", [None, None])[1],
-                            "neuroticisme": model.get("neuroticisme", [None])[0],
-                            "Borne inf IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None]])[2][0],
-                            "Borne sup IC à 0.95 de Neur.": model.get("neuroticisme", [None, None, [None, None]])[2][1],
-                            "Commentaire neuroticisme": model.get("neuroticisme", [None, None])[1],
-                            "détails sur le prompt/fichier": text_detail
-                        })
+                                        "api_key": api_key,
+                                        "ID_applicant": ID_applicant,
+                                        "connaissances financières": model.get("connaissances financières", None)[0],
+                                        "Borne inf IC à 0.95 de CF": model.get("connaissances financières", None)[2][0] if len(model.get("connaissances financières")) == 3 else None,
+                                        "Borne sup IC à 0.95 de CF": model.get("connaissances financières", None)[2][1] if len(model.get("connaissances financières")) == 3 else None,
+                                        "Commentaire CF": model.get("connaissances financières", None)[1],
+                                        "conscienciosité": model.get("conscienciosité", None)[0],
+                                        "Borne inf IC à 0.95 de Consc.": model.get("conscienciosité", None)[2][0] if len(model.get("conscienciosité")) == 3 else None,
+                                        "Borne sup IC à 0.95 de Consc.": model.get("conscienciosité", None)[2][1] if len(model.get("conscienciosité")) == 3 else None,
+                                        "Commentaire conscienciosité": model.get("conscienciosité", None)[1],
+                                        "neuroticisme": model.get("neuroticisme", None)[0],
+                                        "Borne inf IC à 0.95 de Neur.": model.get("neuroticisme", None)[2][0] if len(model.get("neuroticisme")) == 3 else None,
+                                        "Borne sup IC à 0.95 de Neur.": model.get("neuroticisme", None)[2][1] if len(model.get("neuroticisme")) == 3 else None,
+                                        "Commentaire neuroticisme": model.get("neuroticisme", None)[1],
+                                        "nom du fichier": uploaded_file.name
+                                    })
             
             json_str = json.dumps(data, indent=4)
             # Encodage base64 (obligatoire pour GitHub API)
             content = base64.b64encode(json_str.encode()).decode()
             # Infos repo
-            url = f"https://api.github.com/repos/{repo}/contents/json_file/{text_detail}.json"
+            url = f"https://api.github.com/repos/{repo}/contents/json_file/{uploaded_file.name}"
             headers = {"Authorization": f"token {token}"}
             payload = {
                 "message": "adding new json file",
