@@ -43,7 +43,7 @@ def adding_rows(path: str):
                                 "Borne inf IC à 0.95 de Neur.": model.get("neuroticisme", None)[2][0] if len(model.get("neuroticisme")) == 3 else None,
                                 "Borne sup IC à 0.95 de Neur.": model.get("neuroticisme", None)[2][1] if len(model.get("neuroticisme")) == 3 else None,
                                 "Commentaire neuroticisme": model.get("neuroticisme", None)[1],
-                                "détails sur le prompt/fichier": text_detail
+                                "nom du fichier": path
                             })
 
 try:
