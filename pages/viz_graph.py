@@ -31,7 +31,7 @@ def adding_rows(path: str):
     for api_key in data.keys():
         for ID_applicant in data[api_key]:
             model = json.loads(data[api_key][ID_applicant]["model"])
-            rows.append(utils.output_format_viz().format_row)
+            rows.append(utils.output_format_viz(model=model, ID_applicant=ID_applicant, api_key=api_key, path=path).format_row)
 
 try:
     if st.button("Ajouter le fichier"):
@@ -41,7 +41,7 @@ try:
             for api_key in data.keys():
                 for ID_applicant in data[api_key]:
                     model = json.loads(data[api_key][ID_applicant]["model"])
-                    rows.append(utils.output_format_viz().format_row)
+                    rows.append(utils.output_format_viz(model=model, ID_applicant=ID_applicant, api_key=api_key, path=path).format_row)
             
             json_str = json.dumps(data, indent=4)
             # Encodage base64 (obligatoire pour GitHub API)
