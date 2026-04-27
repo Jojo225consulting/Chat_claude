@@ -9,6 +9,9 @@ import base64
 import requests
 import time
 
+import utils
+
+
 st.set_page_config(
     layout="wide"
 )
@@ -23,28 +26,12 @@ rows = []
 
 def adding_rows(path: str):
     global rows
-    with open(f"json_file/{path}", "r", encoding="utf-8") as f: # path du dossier contenant tout le projet
+    with open(f"data/json_file/{path}", "r", encoding="utf-8") as f: # path du dossier contenant tout le projet
         data = json.load(f)
     for api_key in data.keys():
         for ID_applicant in data[api_key]:
             model = json.loads(data[api_key][ID_applicant]["model"])
-            rows.append({
-                                "api_key": api_key,
-                                "ID_applicant": ID_applicant,
-                                "connaissances financières": model.get("connaissances financières", None)[0],
-                                "Borne inf IC à 0.95 de CF": model.get("connaissances financières", None)[2][0] if len(model.get("connaissances financières")) == 3 else None,
-                                "Borne sup IC à 0.95 de CF": model.get("connaissances financières", None)[2][1] if len(model.get("connaissances financières")) == 3 else None,
-                                "Commentaire CF": model.get("connaissances financières", None)[1],
-                                "conscienciosité": model.get("conscienciosité", None)[0],
-                                "Borne inf IC à 0.95 de Consc.": model.get("conscienciosité", None)[2][0] if len(model.get("conscienciosité")) == 3 else None,
-                                "Borne sup IC à 0.95 de Consc.": model.get("conscienciosité", None)[2][1] if len(model.get("conscienciosité")) == 3 else None,
-                                "Commentaire conscienciosité": model.get("conscienciosité", None)[1],
-                                "neuroticisme": model.get("neuroticisme", None)[0],
-                                "Borne inf IC à 0.95 de Neur.": model.get("neuroticisme", None)[2][0] if len(model.get("neuroticisme")) == 3 else None,
-                                "Borne sup IC à 0.95 de Neur.": model.get("neuroticisme", None)[2][1] if len(model.get("neuroticisme")) == 3 else None,
-                                "Commentaire neuroticisme": model.get("neuroticisme", None)[1],
-                                "nom du fichier": path
-                            })
+            rows.append(utils.output_format_viz().format_row)
 
 try:
     if st.button("Ajouter le fichier"):
@@ -54,29 +41,13 @@ try:
             for api_key in data.keys():
                 for ID_applicant in data[api_key]:
                     model = json.loads(data[api_key][ID_applicant]["model"])
-                    rows.append({
-                                        "api_key": api_key,
-                                        "ID_applicant": ID_applicant,
-                                        "connaissances financières": model.get("connaissances financières", None)[0],
-                                        "Borne inf IC à 0.95 de CF": model.get("connaissances financières", None)[2][0] if len(model.get("connaissances financières")) == 3 else None,
-                                        "Borne sup IC à 0.95 de CF": model.get("connaissances financières", None)[2][1] if len(model.get("connaissances financières")) == 3 else None,
-                                        "Commentaire CF": model.get("connaissances financières", None)[1],
-                                        "conscienciosité": model.get("conscienciosité", None)[0],
-                                        "Borne inf IC à 0.95 de Consc.": model.get("conscienciosité", None)[2][0] if len(model.get("conscienciosité")) == 3 else None,
-                                        "Borne sup IC à 0.95 de Consc.": model.get("conscienciosité", None)[2][1] if len(model.get("conscienciosité")) == 3 else None,
-                                        "Commentaire conscienciosité": model.get("conscienciosité", None)[1],
-                                        "neuroticisme": model.get("neuroticisme", None)[0],
-                                        "Borne inf IC à 0.95 de Neur.": model.get("neuroticisme", None)[2][0] if len(model.get("neuroticisme")) == 3 else None,
-                                        "Borne sup IC à 0.95 de Neur.": model.get("neuroticisme", None)[2][1] if len(model.get("neuroticisme")) == 3 else None,
-                                        "Commentaire neuroticisme": model.get("neuroticisme", None)[1],
-                                        "nom du fichier": uploaded_file.name
-                                    })
+                    rows.append(utils.output_format_viz().format_row)
             
             json_str = json.dumps(data, indent=4)
             # Encodage base64 (obligatoire pour GitHub API)
             content = base64.b64encode(json_str.encode()).decode()
             # Infos repo
-            url = f"https://api.github.com/repos/{repo}/contents/json_file/{uploaded_file.name}"
+            url = f"https://api.github.com/repos/{repo}/contents/data/json_file/{uploaded_file.name}"
             headers = {"Authorization": f"token {token}"}
             payload = {
                 "message": "adding new json file",
@@ -92,7 +63,7 @@ except KeyError:
 time.sleep(3)
 
 headers = {"Authorization": f"token {token}"}
-url = f"https://api.github.com/repos/{repo}/contents/json_file"
+url = f"https://api.github.com/repos/{repo}/contents/data/json_file"
 response = requests.get(url, headers=headers)
 files = response.json()
 for f in files:
