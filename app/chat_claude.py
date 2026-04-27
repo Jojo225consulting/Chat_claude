@@ -31,27 +31,18 @@ def main():
                                 role = mono["role"]
                                 texte = mono["content"]
                                 current_chat.append({f"{role}": f"{texte}"})
-                            # st.session_state["ID"].append(list(conversation.keys())[0])
-                            # st.write("current ", current_chat)
+
                             
                         except KeyError:
                             pass
                             
                     old_historic.append(current_chat)
-                # st.write("st.session_state[ID] : ", st.session_state["ID"])
-                # st.write("Ancien historique :")
+
                 for i,conv in enumerate(old_historic):
-                    # def_profil = """Le meilleur profil est celui d'un emprunteur discipliné, éclairé et émotionnellement stable. 
-                    # Il sait ce qu'il signe, honore ses échéances naturellement, et ne laisse pas un événement stressant (perte d'emploi, dépense imprévue) dérailler ses finances.
-                    # Le pire profil cumule trois fragilités qui se renforcent mutuellement : l'ignorance financière lui fait sous-estimer ses engagements, la faible conscienciosité l'empêche de les honorer même quand il le pourrait, et le névrosisme élevé amplifie les comportements contre-productifs dès qu'un choc survient. 
-                    # C'est la combinaison de ces trois facteurs — et non l'un d'eux isolément — qui rend le profil véritablement à risque."""
                     response = client.messages.create(
                         model = "claude-opus-4-6",
                         max_tokens = 4000,
-                        system = context, #Tu est un analyste de profil client pour l'octroi de prêt bancaire. Tu as posé des questions à un client pour évaluer des scores sur 100 de 3 critères: \n" \
-                        #"1. le niveau de connaissance financière du client \n" \
-                        #"2. la consciencosité du client \n" \
-                        #"3. le neuvrosisme du client" \
+                        system = context, 
                         messages=[
                             {"role": "user", "content" : f"""{user_text} \n
                             Historique de la discussion: \n
@@ -79,7 +70,6 @@ def main():
         )
     except:
         pass
-    # if st.button("Enregistrer l'historique du prompt"):
 
 
 if __name__ == "__main__":
