@@ -66,8 +66,16 @@ headers = {"Authorization": f"token {token}"}
 url = f"https://api.github.com/repos/{repo}/contents/data/json_file"
 response = requests.get(url, headers=headers)
 files = response.json()
-for f in files:
-    adding_rows(path = f["name"])
+try:
+    for f in files:
+        adding_rows(path = f["name"])
+except TypeError:
+    st.write("réponse de la requête")
+    st.write(response)
+    st.write("-_-_-_-_-_-_-_-_")
+    st.write("files[0]: ",files[0])
+
+
 
 df = pd.DataFrame(rows)
 
