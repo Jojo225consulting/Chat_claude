@@ -16,3 +16,4 @@ def output_format_viz(model,ID_applicant, api_key, path):
         "Commentaire neuroticisme": model.get("neuroticisme", None)[1],
         "nom du fichier": path
     }
+    return format_row
