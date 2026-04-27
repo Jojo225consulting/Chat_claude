@@ -1,4 +1,4 @@
-def output_format_viz(model,ID_applicant, api_key, path):
+def output_format_viz(model,ID_applicant, api_key, path, **kwargs):
     format_row = {
         "api_key": api_key,
         "ID_applicant": ID_applicant,
