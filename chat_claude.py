@@ -2,6 +2,8 @@ import streamlit as st
 import anthropic
 import json
 import os
+import config
+
 
 def main():
 
@@ -40,8 +42,8 @@ def main():
 
                 for i,conv in enumerate(old_historic):
                     response = client.messages.create(
-                        model = "claude-opus-4-6",
-                        max_tokens = 4000,
+                        model = config.MODEL_NAME,
+                        max_tokens = config.MAX_TOKENS,
                         system = context, 
                         messages=[
                             {"role": "user", "content" : f"""{user_text} \n
@@ -63,7 +65,7 @@ def main():
     try:
         json_string = json.dumps(dict( {str(password)[-7:] : st.session_state["new_historic"]} ), ensure_ascii=False, indent=4)
         st.download_button(
-            label="📥 Télécharger les réponses de Claude Ici",
+            label="📥 Télécharger les réponses de l'Agent Ici",
             data=json_string,
             file_name="session_answers.json",
             mime="application/json"
