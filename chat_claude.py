@@ -41,17 +41,17 @@ def main():
                     old_historic.append(current_chat)
 
                 for i,conv in enumerate(old_historic): #l'envoie des prompts
-                    # response = client.messages.create(
-                    #     model = config.MODEL_NAME,
-                    #     max_tokens = config.MAX_TOKENS,
-                    #     system = context, 
-                    #     messages=[
-                    #         {"role": "user", 
-                    #         "content" : f"""{user_text} \n
-                    #         Historique de la discussion: \n
-                    #         {conv}"""}
-                    #     ]
-                    # )
+                    response = client.messages.create(
+                        model = config.MODEL_NAME,
+                        max_tokens = config.MAX_TOKENS,
+                        system = context, 
+                        messages=[
+                            {"role": "user", 
+                            "content" : f"""{user_text} \n
+                            Historique de la discussion: \n
+                            {conv}"""}
+                        ]
+                    )
 
                     response_test_AI = client.messages.create(
                         model = config.MODEL_NAME,
@@ -62,9 +62,14 @@ def main():
                             "content" : f""" CONVERSATION : \n {conv}"""}
                         ]
 
-                    )          
+                    )
+                    
+                    response = json.loads(response.content[0].text)
+                    response_test_AI = json.loads(response_test_AI.content[0].text)
+                    result = {**response, **response_test_AI}
+
                     st.session_state["new_historic"][st.session_state["ID"][i]] =  {"user" : context + " \n \n " + user_text ,
-                                                           "model" :  response_test_AI.content[0].text } 
+                                                           "model" :  result } 
                 st.write("Réponse de Claude :")
                 st.write("Ce que contient votre historique :")
                 st.write(st.session_state["new_historic"])

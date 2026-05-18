@@ -8,4 +8,4 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MODEL_NAME = os.getenv("LLM_MODEL_NAME")
-MAX_TOKENS = os.getenv("max_tokens")
+MAX_TOKENS = int(os.getenv("max_tokens"))
