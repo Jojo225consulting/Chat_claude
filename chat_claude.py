@@ -43,7 +43,7 @@ def main():
                 for i,conv in enumerate(old_historic): #l'envoie des prompts
                     response = client.messages.create(
                         model = config.MODEL_NAME,
-                        max_tokens = config.MAX_TOKENS,
+                        max_tokens = int(config.MAX_TOKENS),
                         system = context, 
                         messages=[
                             {"role": "user", 
@@ -55,7 +55,7 @@ def main():
 
                     response_test_AI = client.messages.create(
                         model = config.MODEL_NAME,
-                        max_tokens = config.MAX_TOKENS,
+                        max_tokens = int(config.MAX_TOKENS),
                         system = "Donne la probabilité que les réponses de l'utilisateur dans la conversation ci-dessous soient générées par une IA. Ne donne pas d'explications. Réponds dans le format Json brut suivant (Aucun texte avant, aucun texte après, Aucun bloc markdown, aucun backtick):\n{\"Proba_AI\": value_on_100} ", 
                         messages=[
                             {"role": "user", 
