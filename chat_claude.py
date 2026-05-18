@@ -24,7 +24,7 @@ def main():
                 old_historic = []
                 st.session_state["ID"] = []
                 ID_applicant = []
-                for conversation in json.load(uploaded_file):
+                for conversation in json.load(uploaded_file): #pour bien disposer les conversations 
                     current_chat = []
                     for key in conversation:# key correspond à l'ID de la conversation
                         try:
@@ -40,20 +40,31 @@ def main():
                             
                     old_historic.append(current_chat)
 
-                for i,conv in enumerate(old_historic):
-                    response = client.messages.create(
+                for i,conv in enumerate(old_historic): #l'envoie des prompts
+                    # response = client.messages.create(
+                    #     model = config.MODEL_NAME,
+                    #     max_tokens = config.MAX_TOKENS,
+                    #     system = context, 
+                    #     messages=[
+                    #         {"role": "user", 
+                    #         "content" : f"""{user_text} \n
+                    #         Historique de la discussion: \n
+                    #         {conv}"""}
+                    #     ]
+                    # )
+
+                    response_test_AI = client.messages.create(
                         model = config.MODEL_NAME,
                         max_tokens = config.MAX_TOKENS,
-                        system = context, 
+                        system = "Donne la probabilité que les réponses de l'utilisateur dans la conversation ci-dessous soient générées par une IA. Ne donne pas d'explications. Réponds dans le format Json brut suivant (Aucun texte avant, aucun texte après, Aucun bloc markdown, aucun backtick):\n{\"Proba_AI\": value_on_100} ", 
                         messages=[
-                            {"role": "user", "content" : f"""{user_text} \n
-                            Historique de la discussion: \n
-                            {conv}!"""}
+                            {"role": "user", 
+                            "content" : f""" CONVERSATION : \n {conv}"""}
                         ]
 
                     )          
                     st.session_state["new_historic"][st.session_state["ID"][i]] =  {"user" : context + " \n \n " + user_text ,
-                                                           "model" : response.content[0].text} 
+                                                           "model" :  response_test_AI.content[0].text } 
                 st.write("Réponse de Claude :")
                 st.write("Ce que contient votre historique :")
                 st.write(st.session_state["new_historic"])
