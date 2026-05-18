@@ -43,7 +43,7 @@ def main():
                 for i,conv in enumerate(old_historic): #l'envoie des prompts
                     response = client.messages.create(
                         model = st.secrets["MODEL_NAME"], #finalement config a été mis de coté car l'env de streamlit n'arive pas à l'utiliser normalement
-                        max_tokens = int(st.secrets["MAX_TOKENS"]),
+                        max_tokens = st.secrets["MAX_TOKENS"],
                         system = context, 
                         messages=[
                             {"role": "user", 
