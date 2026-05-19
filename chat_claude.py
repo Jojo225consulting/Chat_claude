@@ -56,7 +56,7 @@ def main():
                     response_test_AI = client.messages.create(
                         model = st.secrets["MODEL_NAME"],
                         max_tokens = int(st.secrets["MAX_TOKENS"]),
-                        system = "Donne la probabilité que les réponses de l'utilisateur dans la conversation ci-dessous soient générées par une IA. Ne donne pas d'explications. Réponds dans le format Json brut suivant (Aucun texte avant, aucun texte après, Aucun bloc markdown, aucun backtick):\n{\"Proba_AI\": value_on_100} ", 
+                        system = "Donne la probabilité que les réponses de l'utilisateur dans la conversation ci-dessous soient générées par une IA. Ne donne pas d'explications. Réponds dans le format Json brut suivant (Aucun texte avant, aucun texte après, Aucun bloc markdown, aucun backtick):\n {\"Proba_AI\": value_on_100} ", 
                         messages=[
                             {"role": "user", 
                             "content" : f""" CONVERSATION : \n {conv}"""}
@@ -64,12 +64,11 @@ def main():
 
                     )
                     
-                    response = json.loads(response.content[0].text)
-                    response_test_AI = json.loads(response_test_AI.content[0].text)
-                    result = {**response, **response_test_AI}
+                    response_final = response.content[0].text[:-1] + "," + response_test_AI.content[0].text[1:]
+
 
                     st.session_state["new_historic"][st.session_state["ID"][i]] =  {"user" : context + " \n \n " + user_text ,
-                                                           "model" :  result } 
+                                                           "model" :  response_final } 
                 st.write("Réponse de Claude :")
                 st.write("Ce que contient votre historique :")
                 st.write(st.session_state["new_historic"])

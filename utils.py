@@ -7,6 +7,7 @@ def output_format_viz(model,id_applicant, api_key, path, **kwargs):
     format_row = {
         "Api_key": api_key,
         "ID_applicant": id_applicant,
+        "Proba utilisation IA": model.get("Proba_AI", None),
         "Connaissances financières": model.get("connaissances financières", None)[0],
         "Borne inf IC à 0.95 de CF": model.get("connaissances financières", None)[2][0] if len(model.get("connaissances financières")) == 3 else None,
         "Borne sup IC à 0.95 de CF": model.get("connaissances financières", None)[2][1] if len(model.get("connaissances financières")) == 3 else None,
